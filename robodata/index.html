@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RoboData Workbench — 具身智能数据生产线 · 项目深度页</title>
+<meta name="description" content="RoboData Workbench 项目深度页:八节点数据流水线、质检门禁交互演示、交付可信验证。" />
+<meta name="theme-color" content="#0a0e14" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230a0e14'/%3E%3Ctext%20x='16'%20y='22'%20font-size='15'%20text-anchor='middle'%20fill='%2334d399'%20font-family='monospace'%20font-weight='bold'%3E%3CR/%3E%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0a0e14; --bg-soft: #0f1520; --card: #111826;
+    --border: #1e2937; --border-bright: #2b3a4f;
+    --text: #e6edf3; --text-dim: #8b98a9;
+    --accent: #34d399; --accent-dim: rgba(52,211,153,0.12);
+    --orange: #fb923c; --blue: #38bdf8; --red: #f87171;
+    --mono: "Cascadia Code", Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(10,14,20,.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:58px; }
+  .nav-mark { font-family:var(--mono); font-weight:700; font-size:15px; color:var(--text); }
+  .nav-mark span { color:var(--accent); }
+  .nav-right { display:flex; gap:20px; font-size:14px; align-items:center; }
+  .nav-right a { color:var(--text-dim); transition:color .2s; }
+  .nav-right a:hover { color:var(--text); }
+
+  .hero { position:relative; padding:84px 0 60px; overflow:hidden;
+    background: radial-gradient(ellipse 640px 320px at 70% 10%, rgba(52,211,153,.09), transparent); }
+  .hero-tag { display:inline-block; font-family:var(--mono); font-size:13px; color:var(--accent);
+    background:var(--accent-dim); border:1px solid rgba(52,211,153,.3); border-radius:6px; padding:3px 12px; margin-bottom:20px; }
+  .hero h1 { font-size:44px; font-weight:800; }
+  .hero h1 em { font-style:normal; color:var(--accent); }
+  .hero .sub { font-size:18px; color:var(--text-dim); margin:12px 0 30px; max-width:760px; }
+  .hero-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:40px; }
+  .hstat { border-left:2px solid var(--accent); padding-left:14px; }
+  .hstat b { display:block; font-family:var(--mono); font-size:24px; color:var(--accent); font-weight:700; }
+  .hstat span { font-size:12.5px; color:var(--text-dim); }
+
+  section { padding:64px 0; }
+  .sec-label { font-family:var(--mono); font-size:13px; color:var(--accent); letter-spacing:2px; margin-bottom:8px; }
+  .sec-title { font-size:26px; font-weight:700; margin-bottom:14px; }
+  .sec-desc { color:var(--text-dim); font-size:15px; max-width:780px; margin-bottom:30px; }
+
+  .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .why-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px 22px; }
+  .why-card h4 { font-size:15px; margin-bottom:8px; color:var(--red); }
+  .why-card p { font-size:13.5px; color:var(--text-dim); }
+
+  .flow-box { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px 18px; overflow-x:auto; }
+  .legend { display:flex; gap:18px; font-size:13px; color:var(--text-dim); margin-top:14px; flex-wrap:wrap; }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .node-desc { margin-top:16px; min-height:44px; font-size:14px; color:var(--text-dim);
+    background:var(--bg-soft); border:1px solid var(--border); border-radius:10px; padding:12px 16px; }
+  .node-desc b { color:var(--accent); }
+
+  .lab { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; }
+  .lab-top { display:flex; gap:24px; flex-wrap:wrap; }
+  #trajCanvas { background:var(--bg-soft); border:1px solid var(--border); border-radius:10px; flex:1 1 420px; min-width:300px; }
+  .lab-panel { flex:1 1 300px; min-width:280px; }
+  .gate { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border:1px solid var(--border);
+    border-radius:10px; margin-bottom:10px; font-size:13.5px; cursor:pointer; transition:border-color .2s, background .2s; }
+  .gate:hover { border-color:var(--border-bright); }
+  .gate input { margin-top:3px; accent-color: var(--orange); }
+  .gate .g-name { font-weight:600; }
+  .gate .g-desc { color:var(--text-dim); font-size:12.5px; }
+  .gate .g-state { margin-left:auto; font-family:var(--mono); font-size:12px; white-space:nowrap; padding:1px 8px; border-radius:5px; }
+  .g-state.pass { color:var(--accent); background:var(--accent-dim); }
+  .g-state.block { color:#0a0e14; background:var(--red); font-weight:700; }
+  .lab-actions { display:flex; gap:12px; margin:14px 0; flex-wrap:wrap; }
+  .lab-btn { padding:8px 18px; border-radius:8px; font-size:14px; cursor:pointer;
+    background:var(--accent); color:#06281c; border:none; font-weight:600; }
+  .lab-btn.ghost { background:transparent; color:var(--text-dim); border:1px solid var(--border-bright); }
+  .lab-btn.ghost:hover { border-color:var(--accent); color:var(--accent); }
+  .verdict { border-radius:10px; padding:14px 18px; font-size:14.5px; font-weight:600; border:1px solid; }
+  .verdict.ok { color:var(--accent); border-color:rgba(52,211,153,.4); background:var(--accent-dim); }
+  .verdict.blocked { color:var(--red); border-color:rgba(248,113,113,.4); background:rgba(248,113,113,.08); }
+  .demo-note { font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-top:12px; }
+
+  .trust-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .trust-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; }
+  .trust-card .step { font-family:var(--mono); font-size:12px; color:var(--accent); margin-bottom:8px; }
+  .trust-card h4 { font-size:15.5px; margin-bottom:8px; }
+  .trust-card p { font-size:13.5px; color:var(--text-dim); }
+
+  .cta { text-align:center; padding:70px 0; border-top:1px solid var(--border); }
+  .cta h3 { font-size:24px; margin-bottom:14px; }
+  .cta p { color:var(--text-dim); margin-bottom:26px; }
+  .cta .hero-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 22px; border-radius:8px;
+    font-size:15px; border:1px solid var(--border-bright); color:var(--text); transition:all .2s; }
+  .btn:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#06281c; font-weight:600; }
+
+  footer { border-top:1px solid var(--border); padding:32px 0; text-align:center; font-size:13px; color:var(--text-dim); }
+
+  .reveal { opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity:1; transform:none; transition:none; } }
+  @media (max-width: 760px) {
+    .hero h1 { font-size:30px; }
+    .hero-stats { grid-template-columns:repeat(2,1fr); gap:18px; }
+    .why-grid, .trust-grid { grid-template-columns:1fr; }
+    section { padding:48px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-mark" href="/">← mahonghao<span>.dev</span></a>
+    <div class="nav-right">
+      <a href="https://github.com/MAHONGHAO1/Embodied-AI-Data-Processing-Platform" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-tag">项目深度页</span>
+    <h1>RoboData <em>Workbench</em></h1>
+    <p class="sub">
+      一条自研的机器人演示数据生产线:真机数据从接入、质检到训练就绪数据集交付,
+      全程平台内完成。这一页把它的流水线设计、质检门禁和交付验证讲透。
+    </p>
+    <div class="hero-stats">
+      <div class="hstat"><b>8</b><span>流水线节点,人工与自动混合编排</span></div>
+      <div class="hstat"><b>50 / 32,068</b><span>条 / 帧真机数据接入并跑通闭环</span></div>
+      <div class="hstat"><b>234</b><span>项自动化测试,含独立转换环境</span></div>
+      <div class="hstat"><b>SHA-256</b><span>交付包防篡改,离线可复验</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="why" style="padding-top:56px;">
+  <div class="wrap">
+    <div class="sec-label reveal">// WHY</div>
+    <h2 class="sec-title reveal">为什么需要一条流水线</h2>
+    <p class="sec-desc reveal">
+      机器人演示数据的交付传统上靠人工拷贝、人眼复核、口头约定格式。数据一多,三个问题立刻出现:
+    </p>
+    <div class="why-grid">
+      <div class="why-card reveal"><h4>质量不可控</h4><p>时间戳错位、缺帧重复、异常轨迹混在数据里,等到训练侧才发现,定位一轮要几天。</p></div>
+      <div class="why-card reveal"><h4>交付不可信</h4><p>文件拷过去就完事,对方无法确认内容没被改动、格式没被破坏,信任靠人。</p></div>
+      <div class="why-card reveal"><h4>人工复核贵</h4><p>每一批都靠人眼看,复核成本随数据量线性涨,还看不全。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="approach" style="background:var(--bg-soft); border-block:1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-label reveal">// APPROACH</div>
+    <h2 class="sec-title reveal">八节点流水线,人工与自动混合编排</h2>
+    <p class="sec-desc reveal">
+      每个节点是一个独立环节,自动节点负责确定性工作,人工节点只在机器拿不准的地方介入。
+      点击节点查看说明。
+    </p>
+    <div class="flow-box reveal">
+      <svg id="flowSvg" viewBox="0 0 960 130" width="100%" style="min-width:760px;" role="img" aria-label="八节点流水线图"></svg>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--accent);"></span>自动节点</span>
+        <span><span class="dot" style="background:var(--orange);"></span>人工 / 人机协同节点</span>
+        <span><span class="dot" style="background:var(--blue);"></span>格式转换节点</span>
+      </div>
+      <div class="node-desc" id="nodeDesc">点击上方任一节点查看职责说明。</div>
+    </div>
+  </div>
+</section>
+
+<section id="lab">
+  <div class="wrap">
+    <div class="sec-label reveal">// QUALITY GATES</div>
+    <h2 class="sec-title reveal">质检门禁交互演示</h2>
+    <p class="sec-desc reveal">
+      下面是一条合成 episode 的抓取轨迹(200 帧)。勾选缺陷类型注入脏数据,四道质检门禁会实时检测——
+      这就是流水线里"质检未通过 → 不进转换、不进交付"的强制拦截逻辑。
+    </p>
+    <div class="lab reveal">
+      <div class="lab-top">
+        <canvas id="trajCanvas" width="520" height="340"></canvas>
+        <div class="lab-panel">
+          <label class="gate"><input type="checkbox" id="def1">
+            <span><span class="g-name">时间戳漂移</span><br><span class="g-desc">第 60–90 帧时间戳偏移 80ms,破坏时序同步</span></span>
+            <span class="g-state pass" id="st1">PASS</span></label>
+          <label class="gate"><input type="checkbox" id="def2">
+            <span><span class="g-name">缺帧</span><br><span class="g-desc">第 110–117 帧丢失,动作序列断裂</span></span>
+            <span class="g-state pass" id="st2">PASS</span></label>
+          <label class="gate"><input type="checkbox" id="def3">
+            <span><span class="g-name">异常轨迹</span><br><span class="g-desc">第 140–150 帧位置突变,超出运动学约束</span></span>
+            <span class="g-state pass" id="st3">PASS</span></label>
+          <label class="gate"><input type="checkbox" id="def4">
+            <span><span class="g-name">NaN 行</span><br><span class="g-desc">第 170–174 帧坐标为 NaN,行级定位</span></span>
+            <span class="g-state pass" id="st4">PASS</span></label>
+          <div class="lab-actions">
+            <button class="lab-btn" id="applyBtn">重新生成并检测</button>
+            <button class="lab-btn ghost" id="resetBtn">清空全部缺陷</button>
+          </div>
+          <div class="verdict ok" id="verdict">✓ 全部通过 → 进入转换与交付</div>
+          <div class="demo-note">* 本页数据为程序合成的演示数据,非真实采集数据</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trust" style="background:var(--bg-soft); border-block:1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-label reveal">// TRUST</div>
+    <h2 class="sec-title reveal">交付可信验证</h2>
+    <p class="sec-desc reveal">"交付完成"不是拷贝结束,而是对方能独立验证。三道验证全部留痕:</p>
+    <div class="trust-grid">
+      <div class="trust-card reveal"><div class="step">STEP 1</div><h4>官方 LeRobot 库离线加载</h4><p>交付数据集在隔离环境用官方 LeRobot 库加载,格式与官方训练管线兼容。</p></div>
+      <div class="trust-card reveal"><div class="step">STEP 2</div><h4>PyTorch DataLoader 批读取复核</h4><p>按训练侧真实读取方式批量取数,确认帧序、维度、字段在训练场景下无变形。</p></div>
+      <div class="trust-card reveal"><div class="step">STEP 3</div><h4>SHA-256 防篡改</h4><p>交付包独立解包 + 全量哈希校验,任何字节级改动都可被发现。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h3>查看源码与完整实现</h3>
+    <p>八节点流水线、234 项测试、独立转换环境,全部开源。</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="https://github.com/MAHONGHAO1/Embodied-AI-Data-Processing-Platform" target="_blank" rel="noopener">GitHub 仓库 ↗</a>
+      <a class="btn" href="/">← 返回个人主页</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">RoboData Workbench · mahonghao1.github.io · © 2026 麻洪豪</div>
+</footer>
+
+<script>
+  // 滚动渐入
+  const io = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+  // ---------- 八节点流水线 SVG ----------
+  const NODES = [
+    { id: "upload",   name: "接入 upload",      color: "var(--accent)", desc: "<b>接入 upload</b>:承接仿真与真机两类来源,HDF5 批次进入平台,原始数据保持不可变。" },
+    { id: "clean",    name: "清洗 clean",       color: "var(--accent)", desc: "<b>清洗 clean</b>:去除重复、修复可自动修复的问题,保留处理痕迹以便追溯。" },
+    { id: "filter",   name: "筛选 filter",      color: "var(--accent)", desc: "<b>筛选 filter</b>:按任务与质量规则筛选有效片段,失败轨迹保留为训练负样本资产而非丢弃。" },
+    { id: "annotate", name: "标注 annotate",    color: "var(--orange)", desc: "<b>标注 annotate(人工)</b>:人工与半自动标注补全语义信息,机器拿不准的帧由人介入。" },
+    { id: "review",   name: "审核 review",      color: "var(--orange)", desc: "<b>审核 review(人工)</b>:标注质量抽检与复核,人机协同确认标签一致性。" },
+    { id: "qa",       name: "质检 QA",          color: "var(--accent)", desc: "<b>质检 QA</b>:时间戳同步、缺帧重复、异常轨迹、NaN 行级定位四类内建门禁,未通过批次强制拦截。" },
+    { id: "convert",  name: "转换 convert",     color: "var(--blue)",   desc: "<b>转换 convert</b>:HDF5 → LeRobot v3.0,独立转换环境执行,输出官方训练就绪格式。" },
+    { id: "deliver",  name: "交付 deliver",     color: "var(--accent)", desc: "<b>交付 deliver</b>:打包 + SHA-256 防篡改,官方 LeRobot 库离线加载与 DataLoader 批读取复核后交付。" },
+  ];
+  const svg = document.getElementById("flowSvg");
+  const W = 960, gap = W / NODES.length, boxW = 84, boxH = 44, y = 40;
+  let svgHTML = "";
+  NODES.forEach((n, i) => {
+    const cx = gap * i + gap / 2;
+    if (i < NODES.length - 1) {
+      svgHTML += `<line x1="${cx + boxW/2}" y1="${y + boxH/2}" x2="${cx + gap - boxW/2}" y2="${y + boxH/2}" stroke="var(--border-bright)" stroke-width="2" marker-end="url(#arr)"/>`;
+    }
+    svgHTML += `<rect data-i="${i}" x="${cx - boxW/2}" y="${y}" width="${boxW}" height="${boxH}" rx="9" fill="var(--bg-soft)" stroke="${n.color}" stroke-width="1.6" style="cursor:pointer"/>`;
+    const words = n.name.split(" ");
+    svgHTML += `<text data-i="${i}" x="${cx}" y="${y + 19}" text-anchor="middle" font-size="12.5" fill="var(--text)" style="cursor:pointer">${words[0]}</text>`;
+    svgHTML += `<text data-i="${i}" x="${cx}" y="${y + 35}" text-anchor="middle" font-size="10.5" font-family="monospace" fill="var(--text-dim)" style="cursor:pointer">${words[1] || ""}</text>`;
+  });
+  svg.innerHTML = `<defs><marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7" fill="none" stroke="var(--border-bright)" stroke-width="1.5"/></marker></defs>` + svgHTML;
+  const descBox = document.getElementById("nodeDesc");
+  svg.addEventListener("click", (e) => {
+    const i = e.target.getAttribute("data-i");
+    if (i !== null) descBox.innerHTML = NODES[+i].desc;
+  });
+  descBox.innerHTML = NODES[0].desc;
+
+  // ---------- 质检交互演示(全部为程序合成数据) ----------
+  const N_FRAMES = 200;
+  const canvas = document.getElementById("trajCanvas");
+  const ctx = canvas.getContext("2d");
+  function baseline(t) { // 合成抓取轨迹:两段贝塞尔感曲线
+    if (t < 0.5) {
+      const k = t / 0.5;
+      return [40 + k * 200, 250 - k * k * 40 - k * 90];
+    }
+    const k = (t - 0.5) / 0.5;
+    return [240 + k * 220, 120 + Math.sin(k * Math.PI) * 90 - k * 40];
+  }
+  function genEpisode(defs) {
+    const ep = [];
+    let t = 0;
+    for (let f = 0; f < N_FRAMES; f++) {
+      let [x, y2] = baseline(f / (N_FRAMES - 1));
+      x += (Math.random() - 0.5) * 2.5; y2 += (Math.random() - 0.5) * 2.5;
+      ep.push({ f, x, y: y2, t });
+      t += 0.05;
+    }
+    if (defs.has("d1")) for (let f = 60; f <= 90; f++) ep[f].t += 0.08;         // 时间戳漂移
+    if (defs.has("d2")) for (let f = 110; f <= 117; f++) ep[f].missing = true;  // 缺帧
+    if (defs.has("d3")) for (let f = 140; f <= 150; f++) { ep[f].x += (f - 145) * 14; ep[f].y -= (f - 145) * 10; } // 异常轨迹
+    if (defs.has("d4")) for (let f = 170; f <= 174; f++) { ep[f].x = NaN; ep[f].y = NaN; }                        // NaN
+    return ep;
+  }
+  function detect(ep, defs) {
+    const r = {};
+    r.d1 = { ok: true, frames: [] };
+    for (let f = 1; f < ep.length; f++) if (ep[f].t - ep[f-1].t > 0.075) { r.d1.ok = false; r.d1.frames.push(f); }
+    r.d2 = { ok: true, frames: ep.filter(p => p.missing).map(p => p.f) };
+    if (r.d2.frames.length) r.d2.ok = false;
+    r.d3 = { ok: true, frames: [] };
+    for (let f = 1; f < ep.length; f++) {
+      if (isNaN(ep[f].x) || isNaN(ep[f-1].x)) continue;
+      const dx = ep[f].x - ep[f-1].x, dy = ep[f].y - ep[f-1].y;
+      if (Math.hypot(dx, dy) > 18) { r.d3.ok = false; r.d3.frames.push(f); }
+    }
+    r.d4 = { ok: !defs.has("d4"), frames: ep.filter(p => isNaN(p.x)).map(p => p.f) };
+    return r;
+  }
+  function draw(ep, res) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0f1520"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(30,41,55,.6)"; ctx.lineWidth = 1;
+    for (let gx = 0; gx < canvas.width; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, canvas.height); ctx.stroke(); }
+    for (let gy = 0; gy < canvas.height; gy += 40) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(canvas.width, gy); ctx.stroke(); }
+    const badFrames = new Set([...res.d1.frames, ...res.d3.frames, ...res.d4.frames]);
+    const missing = new Set(res.d2.frames);
+    const scale = 1.28;
+    let prev = null;
+    for (let f = 0; f < ep.length; f++) {
+      const p = ep[f];
+      if (p.missing) { prev = null; continue; }
+      const x = p.x * scale, y2 = p.y * scale;
+      if (isNaN(x) || isNaN(y2)) {
+        ctx.strokeStyle = "#f87171";
+        const px = prev ? prev.px + 6 : 40, py = prev ? prev.py : 160;
+        ctx.beginPath(); ctx.moveTo(px - 4, py - 4); ctx.lineTo(px + 4, py + 4);
+        ctx.moveTo(px + 4, py - 4); ctx.lineTo(px - 4, py + 4); ctx.stroke();
+        prev = null; continue;
+      }
+      const px = x, py = y2;
+      if (prev) {
+        ctx.beginPath(); ctx.moveTo(prev.px, prev.py); ctx.lineTo(px, py);
+        ctx.strokeStyle = badFrames.has(f) ? "#f87171" : (missing.has(f - 1) ? "#fbbf24" : "#34d399");
+        ctx.lineWidth = badFrames.has(f) ? 2.4 : 1.7;
+        ctx.stroke();
+      }
+      prev = { px, py };
+    }
+    ctx.fillStyle = "#8b98a9"; ctx.font = "12px monospace";
+    ctx.fillText("合成抓取轨迹 episode_000 (200 frames)", 12, 20);
+    ctx.fillStyle = "#34d399"; ctx.fillText("■ 正常", canvas.width - 210, 20);
+    ctx.fillStyle = "#f87171"; ctx.fillText("■ 异常/NaN", canvas.width - 150, 20);
+    ctx.fillStyle = "#fbbf24"; ctx.fillText("▨ 缺帧断开", canvas.width - 62, 20);
+  }
+  const defs = () => new Set([
+    document.getElementById("def1").checked && "d1",
+    document.getElementById("def2").checked && "d2",
+    document.getElementById("def3").checked && "d3",
+    document.getElementById("def4").checked && "d4",
+  ].filter(Boolean));
+  const verdict = document.getElementById("verdict");
+  let playHead = 0, savedEp = null, savedRes = null;
+  function replay() {
+    if (savedEp && playHead < savedEp.length) {
+      draw(savedEp.slice(0, playHead).concat(savedEp.slice(playHead).map(p => ({ ...p, missing: true }))), savedRes);
+      playHead += 2;
+      setTimeout(replay, 16);
+    }
+  }
+  function run() {
+    const d = defs();
+    const ep = genEpisode(d);
+    const res = detect(ep, d);
+    draw(ep, res);
+    savedEp = ep; savedRes = res; playHead = 0;
+    setTimeout(replay, 30);
+    [["d1","st1"],["d2","st2"],["d3","st3"],["d4","st4"]].forEach(([k, id]) => {
+      const el = document.getElementById(id);
+      const framesTxt = res[k].frames.length ? " (帧 " + res[k].frames[0] + "+" + ")" : "";
+      el.textContent = res[k].ok ? "PASS" : "拦截" + framesTxt;
+      el.className = "g-state " + (res[k].ok ? "pass" : "block");
+    });
+    const allOk = res.d1.ok && res.d2.ok && res.d3.ok && res.d4.ok;
+    verdict.className = "verdict " + (allOk ? "ok" : "blocked");
+    verdict.textContent = allOk
+      ? "✓ 全部通过 → 进入转换与交付"
+      : "✗ 质检未通过 → 批次被强制拦截,不进转换、不进交付(缺陷轨迹保留为负样本资产)";
+  }
+  document.getElementById("applyBtn").addEventListener("click", run);
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    ["def1","def2","def3","def4"].forEach((id) => document.getElementById(id).checked = false);
+    run();
+  });
+  ["def1","def2","def3","def4"].forEach((id) => document.getElementById(id).addEventListener("change", run));
+  run();
+</script>
+
+</body>
+</html>
