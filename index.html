@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>麻洪豪 Mahonghao — 具身智能数据工程</title>
+<meta name="description" content="具身智能数据工程方向 · 数据处理 / 数据 Pipeline / 数据平台开发 · 2027 届" />
+<meta name="theme-color" content="#0a0e14" />
+<meta property="og:title" content="麻洪豪 Mahonghao — 具身智能数据工程" />
+<meta property="og:description" content="具身智能数据工程方向 · 数据处理 / 数据 Pipeline / 数据平台开发 · 2027 届" />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230a0e14'/%3E%3Ctext%20x='16'%20y='22'%20font-size='15'%20text-anchor='middle'%20fill='%2334d399'%20font-family='monospace'%20font-weight='bold'%3E%3CM/%3E%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-soft: #0f1520;
+    --card: #111826;
+    --border: #1e2937;
+    --border-bright: #2b3a4f;
+    --text: #e6edf3;
+    --text-dim: #8b98a9;
+    --accent: #34d399;
+    --accent-dim: rgba(52, 211, 153, 0.12);
+    --mono: "Cascadia Code", Consolas, "JetBrains Mono", monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 14, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .nav-mark { font-family: var(--mono); font-weight: 700; font-size: 15px; color: var(--text); }
+  .nav-mark span { color: var(--accent); }
+  .nav-links { display: flex; gap: 26px; font-size: 14px; }
+  .nav-links a { color: var(--text-dim); transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    padding: 110px 0 90px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 600px 320px at 75% 20%, rgba(52, 211, 153, 0.08), transparent),
+      radial-gradient(ellipse 500px 300px at 20% 80%, rgba(56, 130, 246, 0.06), transparent);
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.25;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+  }
+  .hero .wrap { position: relative; }
+  .hero-flex { display: flex; align-items: center; gap: 48px; }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-sign {
+    width: 400px; max-width: 38vw; flex-shrink: 0;
+    filter: invert(1) contrast(1.18) brightness(1.05);
+    mix-blend-mode: screen;
+    opacity: 0.95;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--mono); font-size: 13px; color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 6px; padding: 3px 12px; margin-bottom: 22px;
+  }
+  .hero h1 { font-size: 52px; font-weight: 800; letter-spacing: 1px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .sub { font-size: 20px; color: var(--text-dim); margin: 14px 0 26px; }
+  .hero .desc { max-width: 620px; color: var(--text-dim); margin-bottom: 36px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 8px; font-size: 15px;
+    border: 1px solid var(--border-bright); color: var(--text);
+    transition: all .2s;
+  }
+  .btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #06281c; font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.1); }
+
+  /* ---------- sections ---------- */
+  section { padding: 72px 0; }
+  .sec-label {
+    font-family: var(--mono); font-size: 13px; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 10px;
+  }
+  .sec-title { font-size: 28px; font-weight: 700; margin-bottom: 36px; }
+
+  /* ---------- stats ---------- */
+  .stats { border-block: 1px solid var(--border); background: var(--bg-soft); padding: 44px 0; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 36px; font-weight: 700; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-num small { font-size: 20px; }
+  .stat-label { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ---------- projects ---------- */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(52, 211, 153, 0.45);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  }
+  .card h3 { font-size: 19px; margin-bottom: 2px; }
+  .card .card-sub { font-size: 13px; color: var(--text-dim); font-family: var(--mono); margin-bottom: 16px; }
+  .card ul { list-style: none; margin-bottom: 18px; }
+  .card li { position: relative; padding-left: 18px; font-size: 14px; color: var(--text-dim); margin-bottom: 8px; }
+  .card li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .tag {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: 5px; padding: 2px 10px; color: var(--text-dim);
+  }
+  .card-link { font-size: 14px; font-weight: 600; }
+
+  /* ---------- timeline ---------- */
+  .tl { position: relative; padding-left: 26px; }
+  .tl::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; padding-bottom: 38px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -26px; top: 8px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent);
+  }
+  .tl-item.now::before { background: var(--accent); box-shadow: 0 0 12px rgba(52, 211, 153, 0.6); }
+  .tl-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tl-role { font-size: 17px; font-weight: 700; }
+  .tl-co { font-size: 15px; color: var(--accent); }
+  .tl-time { font-family: var(--mono); font-size: 13px; color: var(--text-dim); }
+  .tl-desc { font-size: 14px; color: var(--text-dim); max-width: 760px; }
+
+  /* ---------- skills ---------- */
+  .skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .skill-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+  .skill-box h4 { font-size: 15px; margin-bottom: 10px; color: var(--accent); }
+  .skill-box p { font-size: 14px; color: var(--text-dim); }
+  .honor-line {
+    margin-top: 22px; padding: 18px 24px;
+    background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px;
+    font-size: 14px; color: var(--text-dim);
+  }
+  .honor-line strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; }
+  footer .mail { font-family: var(--mono); font-size: 15px; }
+  footer .meta { font-size: 13px; color: var(--text-dim); margin-top: 10px; }
+
+  /* ---------- reveal animation ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ---------- 迭代:导航高亮 / 返回顶部 / 卡片视觉条 / 光斑微动效 ---------- */
+  .nav-links a.active { color: var(--accent); }
+  .hero::after {
+    content: ""; position: absolute;
+    width: 540px; height: 540px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(52, 211, 153, 0.07), transparent 70%);
+    top: -170px; right: -130px;
+    animation: drift 14s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes drift { from { transform: translate(0, 0); } to { transform: translate(-70px, 46px); } }
+  .card-visual {
+    height: 7px; border-radius: 99px; margin: -4px 0 18px;
+    background: linear-gradient(90deg, var(--accent), rgba(52, 211, 153, 0.12));
+  }
+  .card-visual.alt { background: linear-gradient(90deg, #38bdf8, rgba(56, 189, 248, 0.12)); }
+  #toTop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--border-bright);
+    color: var(--accent); font-size: 17px; cursor: pointer;
+    opacity: 0; pointer-events: none; transition: all .25s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { border-color: var(--accent); transform: translateY(-3px); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .hero::after { animation: none; }
+    .card:hover { transform: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 760px) {
+    .nav-links { display: none; }
+    .hero { padding: 72px 0 60px; }
+    .hero-flex { flex-direction: column-reverse; align-items: flex-start; gap: 22px; }
+    .hero-sign { width: 250px; max-width: 60vw; }
+    .hero h1 { font-size: 36px; }
+    .hero .sub { font-size: 16px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 26px; }
+    .stat-num { font-size: 28px; }
+    .proj-grid, .skill-grid { grid-template-columns: 1fr; }
+    section { padding: 52px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-mark" href="#top">mahonghao<span>.dev</span></a>
+    <div class="nav-links">
+      <a href="#projects">项目</a>
+      <a href="#experience">经历</a>
+      <a href="#skills">技能</a>
+      <a href="https://github.com/MAHONGHAO1">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-flex">
+      <div class="hero-text">
+        <span class="hero-tag">具身智能数据工程</span>
+        <h1>麻洪豪 <em>Mahonghao</em></h1>
+        <p class="sub">数据处理 / 数据 Pipeline / 数据平台开发 · 2027 届</p>
+        <p class="desc">
+          上海应用技术大学 机器人工程专业。从真机数采平台、上传链路对账到训练数据集交付,
+          做机器人数据链路上"质量可信"的那一段。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="resume-mahonghao.pdf" download>下载简历 PDF</a>
+          <a class="btn" href="https://github.com/MAHONGHAO1" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+      <img class="hero-sign" src="assets/signature.jpg" alt="麻洪豪 手写签名" />
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat reveal">
+      <div class="stat-num" data-count="2300" data-suffix="+">0</div>
+      <div class="stat-label">上传作业分阶段对账</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num" data-count="678">0</div>
+      <div class="stat-label">回归测试零新增失败</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num" data-count="32068">0</div>
+      <div class="stat-label">帧真机数据跑通闭环</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num" data-count="98" data-suffix="%">0</div>
+      <div class="stat-label">数据交付合格率</div>
+    </div>
+  </div>
+</div>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-label reveal">// PROJECTS</div>
+    <h2 class="sec-title reveal">项目</h2>
+    <div class="proj-grid">
+
+      <div class="card reveal">
+        <div class="card-visual"></div>
+        <h3>RoboData Workbench</h3>
+        <div class="card-sub">具身智能数据生产线</div>
+        <ul>
+          <li>独立搭建机器人演示数据处理流水线:接入 → 清洗筛选 → 标注审核 → 质检 → 转换 → 打包交付,人工与自动节点混合编排</li>
+          <li>质检经验沉淀为流水线内建规则:时间戳同步、缺帧重复、异常轨迹、NaN 行级定位,未通过批次强制拦截</li>
+          <li>真机数据全量 50 条 / 32,068 帧跑通闭环;交付经官方 LeRobot 库离线加载 + DataLoader 复核,SHA-256 防篡改</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">LeRobot</span>
+          <span class="tag">HDF5</span><span class="tag">SHA-256</span>
+        </div>
+        <a class="card-link" href="https://github.com/MAHONGHAO1/Embodied-AI-Data-Processing-Platform" target="_blank" rel="noopener">查看仓库 ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-visual alt"></div>
+        <h3>AI 智选基金助手</h3>
+        <div class="card-sub">个人投资辅助决策系统</div>
+        <ul>
+          <li>AkShare / 东方财富双数据源,自动重试、跨源切换、模拟数据兜底的多层容错链路</li>
+          <li>参考晨星体系实现五维加权评分(0–10 分 + 星级),通义千问生成结构化建议,API 故障自动降级本地规则</li>
+          <li>交互看板:收益-回撤散点、五维雷达、定投回测,一键导出 Markdown / HTML 报告</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Plotly</span>
+          <span class="tag">通义千问</span><span class="tag">AkShare</span>
+        </div>
+        <a class="card-link" href="https://github.com/MAHONGHAO1/AI-Fund-Management-Platform" target="_blank" rel="noopener">查看仓库 ↗</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="background: var(--bg-soft); border-block: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-label reveal">// EXPERIENCE</div>
+    <h2 class="sec-title reveal">实习经历</h2>
+    <div class="tl">
+
+      <div class="tl-item now reveal">
+        <div class="tl-head">
+          <span class="tl-role">具身数据算法工程师</span>
+          <span class="tl-co">擎仓机器人(Quic Robot)</span>
+          <span class="tl-time">2026.10 – 至今</span>
+        </div>
+        <p class="tl-desc">
+          真机数采平台部署与迭代:QRDF / LeRobot 双格式同步双写、三相机适配,深度流分段有界缓冲(25.9GiB → 63MiB),
+          支撑 1510 秒长时序采集;上传链路 2,300+ 作业分阶段对账与根因分类,暂存自动回收算子(生产规模仿真 20/20);
+          参与华润 WMS–WCS 四接口现场联调与 SM2 国密验签。
+        </p>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-head">
+          <span class="tl-role">数据交付工程师</span>
+          <span class="tl-co">光轮智能(Lightwheel)</span>
+          <span class="tl-time">2026.6 – 2026.10</span>
+        </div>
+        <p class="tl-desc">
+          独立开发 LeRobot v3.0 转换与校验工具,对齐位姿、相机参数、MANO 手部参数等多模态字段;
+          迭代客户数据导出脚本与交付产物自动组装;补齐元数据兜底逻辑,参与 Docker 镜像构建与交付包校验。
+        </p>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-head">
+          <span class="tl-role">具身智能数据工程</span>
+          <span class="tl-co">中国电信人工智能研究院(Tele ai)</span>
+          <span class="tl-time">2026.1 – 2026.6</span>
+        </div>
+        <p class="tl-desc">
+          面向 VLA 具身预训练搭建自动化多模态数据处理流水线,处理 PB 级超 4 亿帧样本,交付合格率稳定 98% 以上;
+          搭建全覆盖自动化质检体系;参与 VLA 真机推理与 RL 策略验证,支撑团队开源项目与 Arxiv 论文发布。
+        </p>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-head">
+          <span class="tl-role">智能车舱数据工程</span>
+          <span class="tl-co">商汤科技(Sensetime)</span>
+          <span class="tl-time">2025.7 – 2026.1</span>
+        </div>
+        <p class="tl-desc">
+          针对车载 DMS/OMS 误检设计多模态采集协议,产出 2TB 标注数据、补充 500GB 稀缺长尾样本,量产误检率降低 10%;
+          开发自动化采集脚本,人工操作时长缩减 40%,复用至 3 款新车项目;设计多路相机、麦克风时序对齐方案。
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-label reveal">// SKILLS</div>
+    <h2 class="sec-title reveal">技能与荣誉</h2>
+    <div class="skill-grid">
+      <div class="skill-box reveal">
+        <h4>数据工程</h4>
+        <p>多模态数据采集、清洗、质检、标注;LeRobot / HDF5 / QRDF 格式转换;真机数采平台与上传链路的部署、对账与算子开发;具备 PB 级机器人数据处理经验。</p>
+      </div>
+      <div class="skill-box reveal">
+        <h4>工程开发</h4>
+        <p>Python、C/C++、ROS1/2、Linux、SQL、Streamlit、Plotly;自动化脚本开发、Docker 镜像构建与多传感器时序同步。</p>
+      </div>
+      <div class="skill-box reveal">
+        <h4>AI 协作研发</h4>
+        <p>codex / claude code 等 AI 编码工作流;独立完成大规模代码审查、自动化测试与线上运维处置。</p>
+      </div>
+      <div class="skill-box reveal">
+        <h4>证书与语言</h4>
+        <p>人工智能训练师、上海市信息技术水平人工智能一级、计算机 C 语言三级;英语四级,可阅读英文技术文档。</p>
+      </div>
+    </div>
+    <div class="honor-line reveal">
+      <strong>荣誉与专利</strong> — 中国国际"互联网+"大学生创新创业大赛国家级铜奖 · 全国无人系统应用大赛国家级三等奖 ·
+      "西门子杯"省部级三等奖 · 知行杯省部级三等奖 · 多次校优秀奖学金 ·
+      实用新型专利《一种机器人快速升降定位装置》第一发明人
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="mail" href="mailto:Mahonghao11@outlook.com">Mahonghao11@outlook.com</a>
+    <p class="meta">github.com/MAHONGHAO1 · © 2026 麻洪豪</p>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="返回顶部">↑</button>
+
+<script>
+  // 滚动渐入
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+  // 数字计数(进入视口后触发)
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || "";
+    const dur = 1400, t0 = performance.now();
+    function frame(t) {
+      const p = Math.min((t - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.innerHTML = Math.round(target * eased).toLocaleString("en-US") + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  const statIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { animateCount(e.target); statIO.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll(".stat-num").forEach((el) => statIO.observe(el));
+
+  // 导航当前区块高亮
+  const navMap = [["projects", document.getElementById("projects")],
+                  ["experience", document.getElementById("experience")],
+                  ["skills", document.getElementById("skills")]];
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      document.querySelectorAll(".nav-links a").forEach((a) => a.classList.remove("active"));
+      const hit = navMap.find(([, sec]) => sec === e.target);
+      if (hit) document.querySelector('.nav-links a[href="#' + hit[0] + '"]').classList.add("active");
+    });
+  }, { rootMargin: "-30% 0px -55% 0px" });
+  navMap.forEach(([, sec]) => sec && navIO.observe(sec));
+
+  // 返回顶部
+  const toTop = document.getElementById("toTop");
+  window.addEventListener("scroll", () => {
+    toTop.classList.toggle("show", window.scrollY > 600);
+  }, { passive: true });
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+</script>
+
+</body>
+</html>
