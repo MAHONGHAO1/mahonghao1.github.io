@@ -422,6 +422,50 @@
       </div>
 
     </div>
+
+    <div class="sec-label reveal" style="margin-top:52px;">// PLATFORMS @ QUIC ROBOT</div>
+    <h3 class="reveal" style="font-size:19px; margin-bottom:6px;">参与建设的平台</h3>
+    <p class="reveal" style="font-size:13.5px; color:var(--text-dim); margin-bottom:20px;">
+      实习期间参与建设的两套内部平台:真机数采工作站的控制端与数据全生命周期管理控制台。界面截图仅用于个人经历说明,版权归北京擎仓机器人科技有限公司所有。
+    </p>
+    <div class="proj-grid">
+
+      <div class="card reveal">
+        <div class="card-visual"></div>
+        <h3 style="font-size:16.5px;">数据采集平台 QuicStation</h3>
+        <div class="card-sub">真机数采工作站控制端 · 双格式录制</div>
+        <img class="shot-main" src="assets/quic/05-collect-setup.png" alt="数采平台批次设置界面" />
+        <div class="shot-thumbs">
+          <img class="on" src="assets/quic/05-collect-setup.png" data-cap="批次设置 · QRDF / LeRobot 双格式根目录" alt="批次设置" />
+          <img src="assets/quic/07-uploads.png" data-cap="上传队列 · 文件传输 / 人工审核联动" alt="上传队列" />
+        </div>
+        <div class="shot-caption" id="shotCap">批次设置 · QRDF / LeRobot 双格式根目录</div>
+        <ul>
+          <li>数采员在该界面完成批次设置、设备连接确认与采集控制,QRDF 与 LeRobot 双根目录同一步骤并行写出</li>
+          <li>上传队列与 Studio 审核联动:文件传输完成后进入平台准入与人工审核,形成采集 → 上传 → 准入的完整链路</li>
+          <li>本学期在真机工作站落地双格式并行录制与三相机适配,并持续迭代该控制端的前端体验</li>
+        </ul>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-visual alt"></div>
+        <h3 style="font-size:16.5px;">数据管理平台 QuicStudio</h3>
+        <div class="card-sub">数据全生命周期管理控制台</div>
+        <img class="shot-main" src="assets/quic/01-mining-tasks.png" alt="QuicStudio 数采任务界面" />
+        <div class="shot-thumbs">
+          <img class="on" src="assets/quic/01-mining-tasks.png" data-cap="数采任务 · 任务与采集时长管理" alt="数采任务" />
+          <img src="assets/quic/02-annotation.png" data-cap="标注治理 · 批次分配与转派" alt="标注治理" />
+          <img src="assets/quic/04-data-overview.png" data-cap="数据概览 · 数据包资产与 Episodes 管理" alt="数据概览" />
+        </div>
+        <div class="shot-caption">数采任务 · 任务与采集时长管理</div>
+        <ul>
+          <li>覆盖采集管理、数据标注、数据沉淀到训练的数据全生命周期,统一批次 / Episode 管理口径</li>
+          <li>数采任务页管理目标采集时长与有效时长进度;标注治理负责批次分配、转派与审核流转</li>
+          <li>数据概览以数据包为单元管理 Episodes、采集时长与入库有效率,支撑训练侧取数</li>
+        </ul>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -515,18 +559,21 @@
   }, { passive: true });
   toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-  // 项目截图画廊:点缩略图换主图
-  const shotMain = document.getElementById("shotMain");
-  const shotCap = document.getElementById("shotCap");
+  // 截图画廊(通用):点缩略图切换所在卡片的主图与说明
   document.querySelectorAll(".shot-thumbs img").forEach((img) => {
     img.addEventListener("click", () => {
-      document.querySelectorAll(".shot-thumbs img").forEach((i) => i.classList.remove("on"));
+      const card = img.closest(".card");
+      card.querySelectorAll(".shot-thumbs img").forEach((i) => i.classList.remove("on"));
       img.classList.add("on");
-      shotMain.src = img.src;
-      shotCap.textContent = img.dataset.cap;
+      const main = card.querySelector(".shot-main");
+      const cap = card.querySelector(".shot-caption");
+      if (main) main.src = img.src;
+      if (cap) cap.textContent = img.dataset.cap || "";
     });
   });
-  shotMain.addEventListener("click", () => window.open(shotMain.src, "_blank"));
+  document.querySelectorAll(".shot-main").forEach((img) => {
+    img.addEventListener("click", () => window.open(img.src, "_blank"));
+  });
 
   // hero 数据网络动效(主题性:节点 + 连线,呼应数据工程)
   (function heroNet() {
