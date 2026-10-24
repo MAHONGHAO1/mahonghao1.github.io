@@ -182,6 +182,7 @@
 
   /* ---------- 迭代:导航高亮 / 返回顶部 / 卡片视觉条 / 光斑微动效 ---------- */
   .nav-links a.active { color: var(--accent); }
+  #heroNet { position: absolute; inset: 0; pointer-events: none; }
   .hero::after {
     content: ""; position: absolute;
     width: 540px; height: 540px; border-radius: 50%;
@@ -210,6 +211,33 @@
     .hero::after { animation: none; }
     .card:hover { transform: none; }
   }
+
+  /* ---------- 第三轮:项目截图画廊 / 实习要点 / 荣誉徽章 ---------- */
+  .shot-main {
+    width: 100%; border-radius: 10px; border: 1px solid var(--border-bright);
+    display: block; margin: 4px 0 12px; cursor: zoom-in;
+  }
+  .shot-thumbs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .shot-thumbs img {
+    width: 74px; border-radius: 6px; border: 1.5px solid var(--border);
+    cursor: pointer; opacity: .55; transition: all .2s;
+  }
+  .shot-thumbs img.on { border-color: var(--accent); opacity: 1; }
+  .shot-caption { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin: -8px 0 14px; }
+  .tl-points { list-style: none; margin-top: 8px; }
+  .tl-points li { position: relative; padding-left: 16px; font-size: 13.5px; color: var(--text-dim); margin-bottom: 5px; }
+  .tl-points li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+  .honor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 16px; }
+  .honor-badge {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px;
+    transition: border-color .2s, transform .2s;
+  }
+  .honor-badge:hover { border-color: rgba(52,211,153,.4); transform: translateY(-2px); }
+  .honor-badge .medal { font-size: 22px; }
+  .honor-badge b { font-size: 14px; display: block; }
+  .honor-badge span { font-size: 12.5px; color: var(--text-dim); }
+  @media (max-width: 760px) { .honor-grid { grid-template-columns: 1fr; } }
 
   /* ---------- responsive ---------- */
   @media (max-width: 760px) {
@@ -241,6 +269,7 @@
 </nav>
 
 <header class="hero" id="top">
+  <canvas id="heroNet" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="hero-flex">
       <div class="hero-text">
@@ -292,6 +321,14 @@
         <div class="card-visual"></div>
         <h3>RoboData Workbench</h3>
         <div class="card-sub">具身智能数据生产线</div>
+        <img class="shot-main" id="shotMain" src="assets/rwb/00_home.png" alt="RoboData Workbench 工作台界面" />
+        <div class="shot-thumbs">
+          <img class="on" src="assets/rwb/00_home.png" data-cap="工作台主页 · 八节点导航" alt="工作台主页" />
+          <img src="assets/rwb/05_annotate.png" data-cap="标注节点 · 人工与半自动标注" alt="标注界面" />
+          <img src="assets/rwb/07_quality.png" data-cap="质检节点 · 内建规则门禁" alt="质检界面" />
+          <img src="assets/rwb/09_deliver.png" data-cap="交付节点 · 打包与校验" alt="交付界面" />
+        </div>
+        <div class="shot-caption" id="shotCap">工作台主页 · 八节点导航</div>
         <ul>
           <li>独立搭建机器人演示数据处理流水线:接入 → 清洗筛选 → 标注审核 → 质检 → 转换 → 打包交付,人工与自动节点混合编排</li>
           <li>质检经验沉淀为流水线内建规则:时间戳同步、缺帧重复、异常轨迹、NaN 行级定位,未通过批次强制拦截</li>
@@ -337,11 +374,12 @@
           <span class="tl-co">擎仓机器人(Quic Robot)</span>
           <span class="tl-time">2026.10 – 至今</span>
         </div>
-        <p class="tl-desc">
-          真机数采平台部署与迭代:QRDF / LeRobot 双格式同步双写、三相机适配,深度流分段有界缓冲(25.9GiB → 63MiB),
-          支撑 1510 秒长时序采集;上传链路 2,300+ 作业分阶段对账与根因分类,暂存自动回收算子(生产规模仿真 20/20);
-          参与华润 WMS–WCS 四接口现场联调与 SM2 国密验签。
-        </p>
+        <p class="tl-desc">真机数采平台与上传链路 · 数据质量闭环 · 平台算子开发</p>
+        <ul class="tl-points">
+          <li>QRDF / LeRobot 双格式同步双写与三相机适配,深度流分段有界缓冲 25.9GiB → 63MiB,支撑 1510 秒长时序采集</li>
+          <li>2,300+ 上传作业分阶段对账与根因分类;暂存自动回收算子,生产规模仿真 20/20,回归 678 项测试零新增失败</li>
+          <li>参与华润 WMS–WCS 四接口联调与 SM2 国密验签,真机任务闭环跑通,定位任务下发全失败根因</li>
+        </ul>
       </div>
 
       <div class="tl-item reveal">
@@ -350,10 +388,11 @@
           <span class="tl-co">光轮智能(Lightwheel)</span>
           <span class="tl-time">2026.6 – 2026.10</span>
         </div>
-        <p class="tl-desc">
-          独立开发 LeRobot v3.0 转换与校验工具,对齐位姿、相机参数、MANO 手部参数等多模态字段;
-          迭代客户数据导出脚本与交付产物自动组装;补齐元数据兜底逻辑,参与 Docker 镜像构建与交付包校验。
-        </p>
+        <p class="tl-desc">LeRobot 格式转换 · 客户交付脚本 · 链路稳定性</p>
+        <ul class="tl-points">
+          <li>独立开发 LeRobot v3.0 转换与校验工具,对齐位姿、相机参数、MANO 手部参数等多模态字段,输出 3,323 帧标准数据集</li>
+          <li>面向 Sample、Plum、Papaya 等客户交付场景迭代 Python 导出脚本,自动组装标准交付产物;参与 Docker 镜像构建与真实交付包校验</li>
+        </ul>
       </div>
 
       <div class="tl-item reveal">
@@ -362,10 +401,11 @@
           <span class="tl-co">中国电信人工智能研究院(Tele ai)</span>
           <span class="tl-time">2026.1 – 2026.6</span>
         </div>
-        <p class="tl-desc">
-          面向 VLA 具身预训练搭建自动化多模态数据处理流水线,处理 PB 级超 4 亿帧样本,交付合格率稳定 98% 以上;
-          搭建全覆盖自动化质检体系;参与 VLA 真机推理与 RL 策略验证,支撑团队开源项目与 Arxiv 论文发布。
-        </p>
+        <p class="tl-desc">VLA 预训练数据流水线 · 全覆盖质检体系</p>
+        <ul class="tl-points">
+          <li>基于 Python 搭建自动化多模态数据处理流水线,处理 PB 级超 4 亿帧样本,数据交付合格率稳定 98% 以上</li>
+          <li>参与 VLA 模型真机推理与 RL 策略验证,输出标准化实验数据集,支撑团队开源项目与 Arxiv 论文发布</li>
+        </ul>
       </div>
 
       <div class="tl-item reveal">
@@ -374,10 +414,11 @@
           <span class="tl-co">商汤科技(Sensetime)</span>
           <span class="tl-time">2025.7 – 2026.1</span>
         </div>
-        <p class="tl-desc">
-          针对车载 DMS/OMS 误检设计多模态采集协议,产出 2TB 标注数据、补充 500GB 稀缺长尾样本,量产误检率降低 10%;
-          开发自动化采集脚本,人工操作时长缩减 40%,复用至 3 款新车项目;设计多路相机、麦克风时序对齐方案。
-        </p>
+        <p class="tl-desc">多模态采集协议 · 采集自动化 · 时序对齐</p>
+        <ul class="tl-points">
+          <li>针对车载 DMS/OMS 误检设计多模态采集协议,产出 2TB 标注数据、补充 500GB 稀缺长尾样本,量产误检率降低 10%</li>
+          <li>开发自动化采集脚本(设备启停、断点续传、自动归档),人工操作时长缩减 40%,复用至 3 款新车;设计多路相机、麦克风时序对齐方案</li>
+        </ul>
       </div>
 
     </div>
@@ -406,10 +447,13 @@
         <p>人工智能训练师、上海市信息技术水平人工智能一级、计算机 C 语言三级;英语四级,可阅读英文技术文档。</p>
       </div>
     </div>
-    <div class="honor-line reveal">
-      <strong>荣誉与专利</strong> — 中国国际"互联网+"大学生创新创业大赛国家级铜奖 · 全国无人系统应用大赛国家级三等奖 ·
-      "西门子杯"省部级三等奖 · 知行杯省部级三等奖 · 多次校优秀奖学金 ·
-      实用新型专利《一种机器人快速升降定位装置》第一发明人
+    <div class="honor-grid reveal">
+      <div class="honor-badge"><span class="medal">🏆</span><span><b>中国国际"互联网+"大学生创新创业大赛</b><span>国家级铜奖</span></span></div>
+      <div class="honor-badge"><span class="medal">🥉</span><span><b>全国无人系统应用大赛</b><span>国家级三等奖</span></span></div>
+      <div class="honor-badge"><span class="medal">🥉</span><span><b>"西门子杯"逻辑算法赛道</b><span>省部级三等奖</span></span></div>
+      <div class="honor-badge"><span class="medal">🥉</span><span><b>知行杯</b><span>省部级三等奖</span></span></div>
+      <div class="honor-badge"><span class="medal">📜</span><span><b>实用新型专利《一种机器人快速升降定位装置》</b><span>第一发明人</span></span></div>
+      <div class="honor-badge"><span class="medal">🎖️</span><span><b>多次校优秀奖学金</b><span>先进个人 · 优秀学生干部 · 优秀学生 · 优秀团员</span></span></div>
     </div>
   </div>
 </section>
@@ -470,6 +514,59 @@
     toTop.classList.toggle("show", window.scrollY > 600);
   }, { passive: true });
   toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+  // 项目截图画廊:点缩略图换主图
+  const shotMain = document.getElementById("shotMain");
+  const shotCap = document.getElementById("shotCap");
+  document.querySelectorAll(".shot-thumbs img").forEach((img) => {
+    img.addEventListener("click", () => {
+      document.querySelectorAll(".shot-thumbs img").forEach((i) => i.classList.remove("on"));
+      img.classList.add("on");
+      shotMain.src = img.src;
+      shotCap.textContent = img.dataset.cap;
+    });
+  });
+  shotMain.addEventListener("click", () => window.open(shotMain.src, "_blank"));
+
+  // hero 数据网络动效(主题性:节点 + 连线,呼应数据工程)
+  (function heroNet() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const cv = document.getElementById("heroNet");
+    const ctx = cv.getContext("2d");
+    let W, H, pts = [];
+    function resize() {
+      W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight;
+      const n = Math.min(64, Math.floor(W / 22));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+      }));
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    (function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of pts) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.hypot(dx, dy);
+          if (d < 120) {
+            ctx.strokeStyle = "rgba(52,211,153," + ((1 - d / 120) * 0.22).toFixed(3) + ")";
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+          }
+        }
+      }
+      ctx.fillStyle = "rgba(52,211,153,.5)";
+      for (const p of pts) { ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2); ctx.fill(); }
+      requestAnimationFrame(frame);
+    })();
+  })();
 </script>
 
 </body>
