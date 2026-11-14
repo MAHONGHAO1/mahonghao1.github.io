@@ -214,16 +214,21 @@
 
   /* ---------- 第三轮:项目截图画廊 / 实习要点 / 荣誉徽章 ---------- */
   .shot-main {
-    width: 100%; border-radius: 10px; border: 1px solid var(--border-bright);
+    width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: var(--bg-soft);
+    border-radius: 10px; border: 1px solid var(--border-bright);
     display: block; margin: 4px 0 12px; cursor: zoom-in;
   }
-  .shot-thumbs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .shot-thumbs { display: flex; gap: 9px; margin-bottom: 16px; flex-wrap: wrap; }
   .shot-thumbs img {
-    width: 74px; border-radius: 6px; border: 1.5px solid var(--border);
-    cursor: pointer; opacity: .55; transition: all .2s;
+    width: clamp(82px, 22%, 136px); aspect-ratio: 16 / 9; object-fit: cover;
+    border-radius: 7px; border: 1.5px solid var(--border);
+    cursor: pointer; opacity: .62; transition: border-color .2s, opacity .2s, transform .2s;
   }
+  .shot-thumbs img:hover { opacity: .9; transform: translateY(-2px); }
   .shot-thumbs img.on { border-color: var(--accent); opacity: 1; }
-  .shot-caption { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin: -8px 0 14px; }
+  .shot-caption { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin: -8px 0 14px; min-height: 1.5em; }
+  .project-note { border-left: 2px solid var(--accent); padding: 9px 12px; margin: -2px 0 18px; background: var(--bg-soft); color: var(--text-dim); font-size: 12.5px; }
+  .project-links { display: flex; gap: 8px 16px; align-items: center; flex-wrap: wrap; }
   .tl-points { list-style: none; margin-top: 8px; }
   .tl-points li { position: relative; padding-left: 16px; font-size: 13.5px; color: var(--text-dim); margin-bottom: 5px; }
   .tl-points li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
@@ -252,6 +257,44 @@
     .proj-grid, .skill-grid { grid-template-columns: 1fr; }
     section { padding: 52px 0; }
   }
+  /* Material + Ant portfolio theme: editorial hierarchy over a calm data surface. */
+  :root {
+    --bg: #f7f9fc;
+    --bg-soft: #eef3f8;
+    --card: #ffffff;
+    --border: #dfe5ec;
+    --border-bright: #b8c4d1;
+    --text: #182230;
+    --text-dim: #667085;
+    --accent: #1677ff;
+    --accent-dim: #e6f4ff;
+    --mono: "IBM Plex Mono", "Cascadia Code", Consolas, monospace;
+    --sans: "IBM Plex Sans", "Noto Sans SC", "Segoe UI", "Microsoft YaHei", sans-serif;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px;
+    --space-4: 16px; --space-5: 24px; --space-6: 32px;
+    --text-body: 16px; --text-caption: 13px; --text-title: 28px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); }
+  nav { background: rgba(247, 249, 252, 0.94); border-bottom-color: var(--border); }
+  .nav-mark, .nav-links a { color: var(--text); }
+  .nav-mark span, .nav-links a:hover, a { color: var(--accent); }
+  .hero { background: radial-gradient(ellipse 600px 320px at 76% 18%, rgba(22, 119, 255, 0.12), transparent), radial-gradient(ellipse 500px 300px at 18% 78%, rgba(114, 46, 209, 0.08), transparent); }
+  .hero::before { background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); opacity: .42; }
+  .hero-tag { color: var(--accent); background: var(--accent-dim); border-color: #91caff; }
+  .hero h1 em, .sec-label, .tl-co { color: var(--accent); }
+  .hero .sub, .hero .desc, .card li, .tl-desc, .stat-label { color: var(--text-dim); }
+  .btn { color: var(--text); border-color: var(--border-bright); background: var(--card); }
+  .btn.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .btn.primary:hover, .btn:hover { border-color: var(--accent); }
+  .stats { background: var(--bg-soft); border-color: var(--border); }
+  .stat-num { color: var(--accent); }
+  .card { background: var(--card); border-color: var(--border); border-radius: 12px; box-shadow: 0 6px 18px rgba(31, 53, 80, .06); }
+  .card:hover { border-color: #91caff; box-shadow: 0 14px 30px rgba(31, 53, 80, .12); }
+  .tag { color: var(--text-dim); background: var(--bg-soft); border-color: var(--border); }
+  .tl::before { background: var(--border); }
+  .tl-item::before { background: var(--bg); border-color: var(--accent); }
+  .tl-item.now::before { background: var(--accent); box-shadow: 0 0 0 5px var(--accent-dim); }
+  .footer { border-top-color: var(--border); color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -293,19 +336,19 @@
 <div class="stats">
   <div class="wrap stats-grid">
     <div class="stat reveal">
-      <div class="stat-num" data-count="2300" data-suffix="+">0</div>
+      <div class="stat-num" data-count="2300" data-suffix="+">2,300+</div>
       <div class="stat-label">上传作业分阶段对账</div>
     </div>
     <div class="stat reveal">
-      <div class="stat-num" data-count="678">0</div>
+      <div class="stat-num" data-count="678">678</div>
       <div class="stat-label">回归测试零新增失败</div>
     </div>
     <div class="stat reveal">
-      <div class="stat-num" data-count="32068">0</div>
+      <div class="stat-num" data-count="32068">32,068</div>
       <div class="stat-label">帧真机数据跑通闭环</div>
     </div>
     <div class="stat reveal">
-      <div class="stat-num" data-count="98" data-suffix="%">0</div>
+      <div class="stat-num" data-count="98" data-suffix="%">98%</div>
       <div class="stat-label">数据交付合格率</div>
     </div>
   </div>
@@ -320,48 +363,57 @@
       <div class="card reveal">
         <div class="card-visual"></div>
         <h3>RoboData Workbench</h3>
-        <div class="card-sub">具身智能数据生产线</div>
-        <img class="shot-main" id="shotMain" src="assets/rwb/00_home.png" alt="RoboData Workbench 工作台界面" />
-        <div class="shot-thumbs">
-          <img class="on" src="assets/rwb/00_home.png" data-cap="工作台主页 · 八节点导航" alt="工作台主页" />
-          <img src="assets/rwb/05_annotate.png" data-cap="标注节点 · 人工与半自动标注" alt="标注界面" />
-          <img src="assets/rwb/07_quality.png" data-cap="质检节点 · 内建规则门禁" alt="质检界面" />
-          <img src="assets/rwb/09_deliver.png" data-cap="交付节点 · 打包与校验" alt="交付界面" />
+        <div class="card-sub">v0.8.0 · 具身数据处理与质量治理工作台</div>
+        <img class="shot-main" src="assets/rwb/workbench-v0.8.0.png" alt="RoboData v0.8.0 React 工作台：Episode 视频、状态曲线、时间轴与检视面板" loading="lazy" decoding="async" />
+        <div class="shot-thumbs" aria-label="RoboData 项目截图">
+          <img class="on" src="assets/rwb/workbench-v0.8.0.png" data-cap="v0.8.0 工作台 · 单相机真实服务界面" alt="v0.8.0 React 工作台" loading="lazy" />
+          <img src="assets/rwb/workbench-v0.8.0-aloha.png" data-cap="ALOHA 四相机视图 · 使用真实视频帧的布局验证；批次元数据为演示构造" alt="四相机布局验证截图，批次元数据为演示构造" loading="lazy" />
+          <img src="assets/rwb/01_overview.png" data-cap="历史界面 · 数据概览（早期版本，仅作迭代对照）" alt="RoboData 历史版本数据概览" loading="lazy" />
+          <img src="assets/rwb/07_quality.png" data-cap="历史界面 · 质检视角（早期版本，仅作迭代对照）" alt="RoboData 历史版本质检页面" loading="lazy" />
+          <img src="assets/rwb/09_deliver.png" data-cap="历史界面 · 交付核验（早期版本，仅作迭代对照）" alt="RoboData 历史版本交付页面" loading="lazy" />
         </div>
-        <div class="shot-caption" id="shotCap">工作台主页 · 八节点导航</div>
+        <div class="shot-caption">v0.8.0 工作台 · 单相机真实服务界面</div>
         <ul>
-          <li>独立搭建机器人演示数据处理流水线:接入 → 清洗筛选 → 标注审核 → 质检 → 转换 → 打包交付,人工与自动节点混合编排</li>
-          <li>质检经验沉淀为流水线内建规则:时间戳同步、缺帧重复、异常轨迹、NaN 行级定位,未通过批次强制拦截</li>
-          <li>真机数据全量 50 条 / 32,068 帧跑通闭环;交付经官方 LeRobot 库离线加载 + DataLoader 复核,SHA-256 防篡改</li>
+          <li>React + TypeScript 工作台与 FastAPI 本地 API；Python 负责具身数据处理、质检、转换与交付核验</li>
+          <li>覆盖批次与 Episode 浏览、质检、审核记录、运行诊断、LeRobot 转换和交付包独立验包</li>
+          <li>固定 ALOHA / SO-100 样本完成了限定范围的真实数据验证；页面同时列出测量与数据边界</li>
         </ul>
+        <div class="project-note">工程补充：表格质检规模实验覆盖 1k / 5k / 10k 合成行；ROS2 MCAP 解析目前是隔离的 Float64 合成示例，不代表通用实机接入。</div>
         <div class="tags">
-          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">LeRobot</span>
-          <span class="tag">HDF5</span><span class="tag">SHA-256</span>
+          <span class="tag">React 19</span><span class="tag">TypeScript</span><span class="tag">FastAPI</span>
+          <span class="tag">Python</span><span class="tag">LeRobot</span><span class="tag">PyArrow</span>
         </div>
-        <a class="card-link" href="https://github.com/MAHONGHAO1/Embodied-AI-Data-Processing-Platform" target="_blank" rel="noopener">查看仓库 ↗</a>
-        <span style="color:var(--text-dim)"> · </span><a class="card-link" href="robodata/">项目深度页 →</a>
+        <div class="project-links">
+          <a class="card-link" href="https://github.com/MAHONGHAO1/Embodied-AI-Data-Processing-Platform" target="_blank" rel="noopener">查看源码仓库 ↗</a>
+          <a class="card-link" href="robodata/">项目深度页 →</a>
+        </div>
       </div>
 
       <div class="card reveal">
         <div class="card-visual alt"></div>
         <h3>AI 智选基金助手</h3>
-        <div class="card-sub">个人投资辅助决策系统</div>
-        <img class="shot-main" src="assets/fund/08-fund-dashboard.png" alt="AI 智选基金助手看板" />
-        <div class="shot-thumbs">
-          <img class="on" src="assets/fund/08-fund-dashboard.png" data-cap="评分看板 · 指标卡 / 数据表格 / 收益-回撤散点" alt="评分看板" />
-          <img src="assets/fund/10-fund-ai.png" data-cap="AI 建议 · 结构化趋势判断与操作建议（接入智谱 GLM）" alt="AI 建议" />
+        <div class="card-sub">v0.3.0 · 本地基金组合分析工作台</div>
+        <img class="shot-main" src="assets/fund/app_v0.3.0.png" alt="AI 智选基金助手 v0.3.0：组合总览、持仓表、指标卡和右侧检视" loading="lazy" decoding="async" />
+        <div class="shot-thumbs" aria-label="基金助手项目截图">
+          <img class="on" src="assets/fund/app_v0.3.0.png" data-cap="v0.3.0 组合总览 · 固定 16:9 工作台" alt="基金组合总览工作台" loading="lazy" />
+          <img src="assets/fund/app_v0.3.0-analysis.png" data-cap="绩效与风险 · 净值走势、来源与口径检视" alt="基金绩效与风险页面" loading="lazy" />
+          <img src="assets/fund/08-fund-dashboard.png" data-cap="历史视角 · 早期评分看板" alt="旧版评分看板，作为迭代对照" loading="lazy" />
+          <img src="assets/fund/10-fund-ai.png" data-cap="历史视角 · AI 辅助分析界面" alt="旧版 AI 辅助分析界面，作为迭代对照" loading="lazy" />
         </div>
-        <div class="shot-caption">评分看板 · 指标卡 / 数据表格 / 收益-回撤散点</div>
+        <div class="shot-caption">v0.3.0 组合总览 · 固定 16:9 工作台</div>
         <ul>
-          <li>AkShare / 东方财富双数据源,自动重试、跨源切换、模拟数据兜底的多层容错链路</li>
-          <li>参考晨星体系实现五维加权评分(0–10 分 + 星级),通义千问生成结构化建议,API 故障自动降级本地规则</li>
-          <li>交互看板:收益-回撤散点、五维雷达、定投回测,一键导出 Markdown / HTML 报告</li>
+          <li>React + TypeScript 前端、FastAPI 本地 API 与 Python 分析逻辑</li>
+          <li>呈现组合、持仓、净值来源与收益风险指标；样本不足时明确标记“不可用”，不以零值代替</li>
+          <li>本地离线演示使用虚构持仓与模拟净值；不连接真实账户、不下单，也不提供投资建议</li>
         </ul>
+        <div class="project-note">证据链：组合总览 → 持仓表 → 净值走势 → 来源与口径；当前版本只展示本地演示数据，不连接真实账户。</div>
         <div class="tags">
-          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Plotly</span>
-          <span class="tag">通义千问</span><span class="tag">AkShare</span>
+          <span class="tag">React 19</span><span class="tag">TypeScript</span><span class="tag">FastAPI</span>
+          <span class="tag">Python</span><span class="tag">ECharts</span><span class="tag">AkShare</span>
         </div>
-        <a class="card-link" href="https://github.com/MAHONGHAO1/AI-Fund-Management-Platform" target="_blank" rel="noopener">查看仓库 ↗</a>
+        <div class="project-links">
+          <a class="card-link" href="https://github.com/MAHONGHAO1/AI-Fund-Management-Platform" target="_blank" rel="noopener">查看源码仓库 ↗</a>
+        </div>
       </div>
 
     </div>
