@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="离线演示：基金组合分析工作台的固定数据快照。虚构合成组合、非实时行情、只读，不连接真实账户，不提供投资建议。" />
+    <meta name="theme-color" content="#f6f4ef" />
+    <title>基金观察 · 离线演示（固定快照）</title>
+    <script type="module" crossorigin src="/demo/assets/index-CrXPgskh.js"></script>
+    <link rel="stylesheet" crossorigin href="/demo/assets/index-uYIio6fL.css">
+  <style>
+#demo-banner{position:fixed;top:0;left:0;right:0;height:44px;z-index:10000;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;background:#fff7e6;border-bottom:1px solid #f0d9a8;color:#7a4b00;font:12px/1.4 "IBM Plex Sans","Noto Sans SC","Segoe UI","Microsoft YaHei",sans-serif}
+#demo-banner strong{font-weight:600;white-space:nowrap}
+#demo-note{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#demo-banner a{color:#1677ff;text-decoration:none;white-space:nowrap}
+body{padding-top:44px !important;box-sizing:border-box !important}
+.fund-app{height:calc(100dvh - 44px) !important;min-height:0 !important}
+@media(max-width:640px){#demo-banner{gap:8px;padding:0 10px;font-size:11px}#demo-banner strong{display:none}}
+</style>
+<script src="/demo/fixtures.js" charset="utf-8"></script>
+</head>
+  <body>
+<div id="demo-banner"><strong>离线演示 · 固定快照</strong><span id="demo-note">净值快照 2026-11-13 · 虚构合成组合 · 非实时行情 · 不连接真实账户 · 只读演示</span><a href="https://mahonghao1.github.io/">返回作品集 ↗</a></div>
+
+    <div id="root"></div>
+
+  </body>
+</html>
