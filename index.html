@@ -228,6 +228,20 @@
   .shot-thumbs img.on { border-color: var(--accent); opacity: 1; }
   .shot-caption { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin: -8px 0 14px; min-height: 1.5em; }
   .project-note { border-left: 2px solid var(--accent); padding: 9px 12px; margin: -2px 0 18px; background: var(--bg-soft); color: var(--text-dim); font-size: 12.5px; }
+  /* 内部平台区块 */
+  .ver-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 14px; }
+  .ver { font-family: var(--mono); font-size: 11.5px; padding: 2px 9px; border-radius: 5px; border: 1px solid var(--border-bright); color: var(--text-dim); background: var(--bg-soft); }
+  .ver.live { color: #0a7c53; border-color: #a7e0c8; background: #e8f8f1; }
+  .ver.next { color: #6b4f00; border-color: #f0d9a0; background: #fdf6e3; }
+  .plat-disclaim {
+    margin-top: 6px; padding: 16px 20px; border-radius: 12px;
+    background: rgba(22, 119, 255, .05); border: 1px solid #cfe3ff;
+    font-size: 13px; color: var(--text-dim); line-height: 1.75;
+  }
+  .plat-disclaim b { color: var(--text); font-weight: 600; }
+  .card.feature { grid-column: 1 / -1; }
+  .card.feature .feature-flex { display: grid; grid-template-columns: 1.35fr 1fr; gap: 30px; align-items: center; }
+  @media (max-width: 760px) { .card.feature .feature-flex { grid-template-columns: 1fr; } }
   .project-links { display: flex; gap: 8px 16px; align-items: center; flex-wrap: wrap; }
   .tl-points { list-style: none; margin-top: 8px; }
   .tl-points li { position: relative; padding-left: 16px; font-size: 13.5px; color: var(--text-dim); margin-bottom: 5px; }
@@ -304,6 +318,7 @@
     <a class="nav-mark" href="#top">mahonghao<span>.dev</span></a>
     <div class="nav-links">
       <a href="#projects">项目</a>
+      <a href="#platforms">平台</a>
       <a href="#experience">经历</a>
       <a href="#skills">技能</a>
       <a href="https://github.com/MAHONGHAO1">GitHub</a>
@@ -423,7 +438,87 @@
   </div>
 </section>
 
-<section id="experience" style="background: var(--bg-soft); border-block: 1px solid var(--border);">
+<section id="platforms" style="background: var(--bg-soft); border-block: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-label reveal">// PLATFORMS @ QUIC ROBOT</div>
+    <h2 class="sec-title reveal">工程平台与内部系统</h2>
+
+    <div class="proj-grid">
+
+      <div class="card feature reveal">
+        <div class="card-visual"></div>
+        <div class="feature-flex">
+          <div>
+            <h3 style="font-size:18px;">数据采集端 QuicStation</h3>
+            <div class="card-sub">真机数采工作站控制端 · 双格式并行录制</div>
+            <img class="shot-main" src="assets/quic/05-collect-setup.png" alt="数采工作站批次设置界面" loading="lazy" decoding="async" />
+            <div class="shot-thumbs" aria-label="数据采集端截图">
+              <img class="on" src="assets/quic/05-collect-setup.png" data-cap="批次设置 · QRDF / LeRobot 双格式根目录" alt="批次设置" loading="lazy" />
+              <img src="assets/quic/07-uploads.png" data-cap="上传队列 · 文件传输与审核联动" alt="上传队列" loading="lazy" />
+            </div>
+            <div class="shot-caption">批次设置 · QRDF / LeRobot 双格式根目录</div>
+          </div>
+          <div>
+            <div class="ver-row">
+              <span class="ver live">v0.4.2 · 当前版本</span>
+              <span class="ver next">v0.4.3 · 迭代中</span>
+              <span class="ver">内部系统 · 代码未公开</span>
+            </div>
+            <ul>
+              <li>数采员在单机完成批次设置、设备连接确认与采集控制,QRDF 与 LeRobot 双根目录同一步骤并行写出</li>
+              <li>三相机适配与深度流分段有界缓冲,单次连续采集支撑 1510 秒长时序,峰值内存 25.9GiB → 63MiB</li>
+              <li>上传队列与 QuicStudio 审核联动,形成 采集 → 上传 → 准入 的完整链路</li>
+            </ul>
+            <div class="project-note">公司内部系统:代码与提交记录不公开。此处仅展示本人参与建设的界面形态与能力范围。</div>
+            <div class="tags">
+              <span class="tag">采集控制端</span><span class="tag">三相机</span><span class="tag">QRDF</span>
+              <span class="tag">LeRobot v3.0</span><span class="tag">上传队列</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card feature reveal">
+        <div class="card-visual alt"></div>
+        <div class="feature-flex">
+          <div>
+            <h3 style="font-size:18px;">数据管理端 QuicStudio</h3>
+            <div class="card-sub">数据全生命周期管理控制台</div>
+            <img class="shot-main" src="assets/quic/01-mining-tasks.png" alt="QuicStudio 数采任务界面" loading="lazy" decoding="async" />
+            <div class="shot-thumbs" aria-label="数据管理端截图">
+              <img class="on" src="assets/quic/01-mining-tasks.png" data-cap="数采任务 · 任务与采集时长管理" alt="数采任务" loading="lazy" />
+              <img src="assets/quic/02-annotation.png" data-cap="标注治理 · 批次分配与转派" alt="标注治理" loading="lazy" />
+              <img src="assets/quic/04-data-overview.png" data-cap="数据概览 · 数据包资产与 Episodes 管理" alt="数据概览" loading="lazy" />
+            </div>
+            <div class="shot-caption">数采任务 · 任务与采集时长管理</div>
+          </div>
+          <div>
+            <div class="ver-row">
+              <span class="ver">内部系统 · 代码未公开</span>
+            </div>
+            <ul>
+              <li>覆盖采集管理、标注治理、数据沉淀到训练取数的全生命周期,统一批次 / Episode 管理口径</li>
+              <li>数采任务页管理目标采集时长与有效时长进度;标注治理负责批次分配、转派与审核流转</li>
+              <li>数据概览以数据包为单元管理 Episodes、采集时长与入库有效率,支撑训练侧取数</li>
+            </ul>
+            <div class="project-note">从采集端写入、上传准入到标注与取数,与 QuicStation 共用同一套批次口径。</div>
+            <div class="tags">
+              <span class="tag">采集管理</span><span class="tag">标注治理</span>
+              <span class="tag">数据沉淀</span><span class="tag">训练取数</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="plat-disclaim reveal">
+      <b>关于这两套系统:</b>均为擎仓机器人内部商用系统,源代码与提交记录不公开。页面截图仅用于个人经历说明,已做脱敏处理,不含真实客户数据;版权归北京擎仓机器人科技有限公司所有。可公开验证的部分见上方 <a href="#projects">项目</a> 区块。
+    </div>
+  </div>
+</section>
+
+<section id="experience">
   <div class="wrap">
     <div class="sec-label reveal">// EXPERIENCE</div>
     <h2 class="sec-title reveal">实习经历</h2>
@@ -479,50 +574,6 @@
         <ul class="tl-points">
           <li>针对车载 DMS/OMS 误检设计多模态采集协议,产出 2TB 标注数据、补充 500GB 稀缺长尾样本,量产误检率降低 10%</li>
           <li>开发自动化采集脚本(设备启停、断点续传、自动归档),人工操作时长缩减 40%,复用至 3 款新车;设计多路相机、麦克风时序对齐方案</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="sec-label reveal" style="margin-top:52px;">// PLATFORMS @ QUIC ROBOT</div>
-    <h3 class="reveal" style="font-size:19px; margin-bottom:6px;">参与建设的平台</h3>
-    <p class="reveal" style="font-size:13.5px; color:var(--text-dim); margin-bottom:20px;">
-      实习期间参与建设的两套内部平台:真机数采工作站的控制端与数据全生命周期管理控制台。界面截图仅用于个人经历说明,版权归北京擎仓机器人科技有限公司所有。
-    </p>
-    <div class="proj-grid">
-
-      <div class="card reveal">
-        <div class="card-visual"></div>
-        <h3 style="font-size:16.5px;">数据采集平台 QuicStation</h3>
-        <div class="card-sub">真机数采工作站控制端 · 双格式录制</div>
-        <img class="shot-main" src="assets/quic/05-collect-setup.png" alt="数采平台批次设置界面" />
-        <div class="shot-thumbs">
-          <img class="on" src="assets/quic/05-collect-setup.png" data-cap="批次设置 · QRDF / LeRobot 双格式根目录" alt="批次设置" />
-          <img src="assets/quic/07-uploads.png" data-cap="上传队列 · 文件传输 / 人工审核联动" alt="上传队列" />
-        </div>
-        <div class="shot-caption" id="shotCap">批次设置 · QRDF / LeRobot 双格式根目录</div>
-        <ul>
-          <li>数采员在该界面完成批次设置、设备连接确认与采集控制,QRDF 与 LeRobot 双根目录同一步骤并行写出</li>
-          <li>上传队列与 Studio 审核联动:文件传输完成后进入平台准入与人工审核,形成采集 → 上传 → 准入的完整链路</li>
-          <li>本学期在真机工作站落地双格式并行录制与三相机适配,并持续迭代该控制端的前端体验</li>
-        </ul>
-      </div>
-
-      <div class="card reveal">
-        <div class="card-visual alt"></div>
-        <h3 style="font-size:16.5px;">数据管理平台 QuicStudio</h3>
-        <div class="card-sub">数据全生命周期管理控制台</div>
-        <img class="shot-main" src="assets/quic/01-mining-tasks.png" alt="QuicStudio 数采任务界面" />
-        <div class="shot-thumbs">
-          <img class="on" src="assets/quic/01-mining-tasks.png" data-cap="数采任务 · 任务与采集时长管理" alt="数采任务" />
-          <img src="assets/quic/02-annotation.png" data-cap="标注治理 · 批次分配与转派" alt="标注治理" />
-          <img src="assets/quic/04-data-overview.png" data-cap="数据概览 · 数据包资产与 Episodes 管理" alt="数据概览" />
-        </div>
-        <div class="shot-caption">数采任务 · 任务与采集时长管理</div>
-        <ul>
-          <li>覆盖采集管理、数据标注、数据沉淀到训练的数据全生命周期,统一批次 / Episode 管理口径</li>
-          <li>数采任务页管理目标采集时长与有效时长进度;标注治理负责批次分配、转派与审核流转</li>
-          <li>数据概览以数据包为单元管理 Episodes、采集时长与入库有效率,支撑训练侧取数</li>
         </ul>
       </div>
 
