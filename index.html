@@ -352,19 +352,19 @@
   <div class="wrap stats-grid">
     <div class="stat reveal">
       <div class="stat-num" data-count="2300" data-suffix="+">2,300+</div>
-      <div class="stat-label">上传作业分阶段对账</div>
+      <div class="stat-label">上传作业分阶段对账 · 擎仓采集端</div>
     </div>
     <div class="stat reveal">
       <div class="stat-num" data-count="678">678</div>
-      <div class="stat-label">回归测试零新增失败</div>
+      <div class="stat-label">回归测试零新增失败 · 擎仓内部</div>
     </div>
     <div class="stat reveal">
       <div class="stat-num" data-count="32068">32,068</div>
-      <div class="stat-label">帧真机数据跑通闭环</div>
+      <div class="stat-label">帧真机数据闭环 · SO-100 全量</div>
     </div>
     <div class="stat reveal">
       <div class="stat-num" data-count="98" data-suffix="%">98%</div>
-      <div class="stat-label">数据交付合格率</div>
+      <div class="stat-label">交付合格率 · Tele ai PB 级样本</div>
     </div>
   </div>
 </div>
@@ -451,12 +451,13 @@
           <div>
             <h3 style="font-size:18px;">数据采集端 QuicStation</h3>
             <div class="card-sub">真机数采工作站控制端 · 双格式并行录制</div>
-            <img class="shot-main" src="assets/quic/05-collect-setup.png" alt="数采工作站批次设置界面" loading="lazy" decoding="async" />
+            <img class="shot-main" src="assets/quic/collect-quick.png" alt="QuicStation 快速数采界面：设备状态、批次设置与采集准备" loading="lazy" decoding="async" />
             <div class="shot-thumbs" aria-label="数据采集端截图">
-              <img class="on" src="assets/quic/05-collect-setup.png" data-cap="批次设置 · QRDF / LeRobot 双格式根目录" alt="批次设置" loading="lazy" />
-              <img src="assets/quic/07-uploads.png" data-cap="上传队列 · 文件传输与审核联动" alt="上传队列" loading="lazy" />
+              <img class="on" src="assets/quic/collect-quick.png" data-cap="快速数采 · 从臂反馈正常 2/2、相机正常 3/3" alt="快速数采主界面" loading="lazy" />
+              <img src="assets/quic/05-collect-setup.png" data-cap="批次设置 · QRDF / LeRobot 双格式根目录" alt="批次设置" loading="lazy" />
+              <img src="assets/quic/07-uploads.png" data-cap="Studio 上传 · 文件传输与审核联动" alt="上传队列" loading="lazy" />
             </div>
-            <div class="shot-caption">批次设置 · QRDF / LeRobot 双格式根目录</div>
+            <div class="shot-caption">快速数采 · 从臂反馈正常 2/2、相机正常 3/3</div>
           </div>
           <div>
             <div class="ver-row">
@@ -469,7 +470,7 @@
               <li>三相机适配与深度流分段有界缓冲,单次连续采集支撑 1510 秒长时序,峰值内存 25.9GiB → 63MiB</li>
               <li>上传队列与 QuicStudio 审核联动,形成 采集 → 上传 → 准入 的完整链路</li>
             </ul>
-            <div class="project-note">公司内部系统:代码与提交记录不公开。此处仅展示本人参与建设的界面形态与能力范围。</div>
+            <div class="project-note">公司内部系统:代码与提交记录不公开。上图为真前端 + 本地仿真后端运行截图,非现场实时数据;仅展示本人参与建设的界面形态与能力范围。</div>
             <div class="tags">
               <span class="tag">采集控制端</span><span class="tag">三相机</span><span class="tag">QRDF</span>
               <span class="tag">LeRobot v3.0</span><span class="tag">上传队列</span>
